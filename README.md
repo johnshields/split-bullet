@@ -3,10 +3,10 @@
 ***
 
 # Project Details
-| **Project Title** | The Split Bullet              |
-|:------------------|:------------------------------|
-| **Developers**    | John Shields                  |
-| **Tech**          | Unity, C#, 3ds Max, Photoshop |
+| **Project Title** | The Split Bullet                                                   |
+|:------------------|:-------------------------------------------------------------------|
+| **Developers**    | [John Shields](https://github.com/johnshields) & [Cathal Butler](https://github.com/CathalButler) |
+| **Tech**          | Unity, C#, 3ds Max, Photoshop                                      |
 
 ***
 
