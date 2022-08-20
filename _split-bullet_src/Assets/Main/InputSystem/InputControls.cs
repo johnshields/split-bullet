@@ -28,9 +28,27 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
             ""id"": ""f49beba3-b51d-4298-91c1-76778cf0afc4"",
             ""actions"": [
                 {
-                    ""name"": ""MoveKeys"",
+                    ""name"": ""Movement"",
                     ""type"": ""Button"",
                     ""id"": ""433e7d36-1d4a-4534-ac5f-90e04cb514fa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveLeftStick"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""9e617f3a-3ce6-45a1-938f-ab6fa8b0afc6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""86b20cce-3804-4f17-af82-f1ed2f89eea2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -72,7 +90,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -83,7 +101,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -94,7 +112,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -105,7 +123,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -116,18 +134,18 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
                     ""id"": ""e8315c92-21d6-49ea-a337-c4a3b9cfd537"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveKeys"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -196,6 +214,39 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e511947b-fd26-4aa4-ba99-9729a82d9c06"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58aa1834-296c-4c26-8745-24a481d2f2bf"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91c0cd2a-9482-4551-bde9-e591c135604c"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveLeftStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -221,7 +272,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
 }");
         // Profiler
         m_Profiler = asset.FindActionMap("Profiler", throwIfNotFound: true);
-        m_Profiler_MoveKeys = m_Profiler.FindAction("MoveKeys", throwIfNotFound: true);
+        m_Profiler_Movement = m_Profiler.FindAction("Movement", throwIfNotFound: true);
+        m_Profiler_MoveLeftStick = m_Profiler.FindAction("MoveLeftStick", throwIfNotFound: true);
+        m_Profiler_Run = m_Profiler.FindAction("Run", throwIfNotFound: true);
         m_Profiler_Look = m_Profiler.FindAction("Look", throwIfNotFound: true);
         m_Profiler_Jump = m_Profiler.FindAction("Jump", throwIfNotFound: true);
         m_Profiler_Attack = m_Profiler.FindAction("Attack", throwIfNotFound: true);
@@ -284,7 +337,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
     // Profiler
     private readonly InputActionMap m_Profiler;
     private IProfilerActions m_ProfilerActionsCallbackInterface;
-    private readonly InputAction m_Profiler_MoveKeys;
+    private readonly InputAction m_Profiler_Movement;
+    private readonly InputAction m_Profiler_MoveLeftStick;
+    private readonly InputAction m_Profiler_Run;
     private readonly InputAction m_Profiler_Look;
     private readonly InputAction m_Profiler_Jump;
     private readonly InputAction m_Profiler_Attack;
@@ -292,7 +347,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
     {
         private @InputControls m_Wrapper;
         public ProfilerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveKeys => m_Wrapper.m_Profiler_MoveKeys;
+        public InputAction @Movement => m_Wrapper.m_Profiler_Movement;
+        public InputAction @MoveLeftStick => m_Wrapper.m_Profiler_MoveLeftStick;
+        public InputAction @Run => m_Wrapper.m_Profiler_Run;
         public InputAction @Look => m_Wrapper.m_Profiler_Look;
         public InputAction @Jump => m_Wrapper.m_Profiler_Jump;
         public InputAction @Attack => m_Wrapper.m_Profiler_Attack;
@@ -305,9 +362,15 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ProfilerActionsCallbackInterface != null)
             {
-                @MoveKeys.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveKeys;
-                @MoveKeys.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveKeys;
-                @MoveKeys.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveKeys;
+                @Movement.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMovement;
+                @MoveLeftStick.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveLeftStick;
+                @MoveLeftStick.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveLeftStick;
+                @MoveLeftStick.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnMoveLeftStick;
+                @Run.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnRun;
+                @Run.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnRun;
+                @Run.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnRun;
                 @Look.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLook;
@@ -321,9 +384,15 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
             m_Wrapper.m_ProfilerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @MoveKeys.started += instance.OnMoveKeys;
-                @MoveKeys.performed += instance.OnMoveKeys;
-                @MoveKeys.canceled += instance.OnMoveKeys;
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @MoveLeftStick.started += instance.OnMoveLeftStick;
+                @MoveLeftStick.performed += instance.OnMoveLeftStick;
+                @MoveLeftStick.canceled += instance.OnMoveLeftStick;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
@@ -348,7 +417,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
     }
     public interface IProfilerActions
     {
-        void OnMoveKeys(InputAction.CallbackContext context);
+        void OnMovement(InputAction.CallbackContext context);
+        void OnMoveLeftStick(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);

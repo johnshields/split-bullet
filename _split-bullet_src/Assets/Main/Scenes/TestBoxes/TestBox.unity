@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 8bdc8060d48a94b439e0eed7edeaa7ef, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5464c15ff9c6ca04cb5790c1773e76fa, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.03139753, g: 0.03865853, b: 0.07067906, a: 1}
+  m_IndirectSpecularColor: {r: 0.47983056, g: 0.5581217, b: 0.6578828, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -909,7 +909,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -966,14 +966,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2404649711771308943}
-  m_LocalRotation: {x: 0.2579639, y: -0.7178835, z: 0.33475435, w: 0.55320656}
+  m_LocalRotation: {x: 0, y: -0.9659258, z: 0.2588191, w: 0}
   m_LocalPosition: {x: -0.15, y: 1.8605841, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2404649711332443193}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 50, y: -104.764, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: -180, z: 0}
 --- !u!1 &2404649711771308943
 GameObject:
   m_ObjectHideFlags: 0
@@ -2790,12 +2790,12 @@ Rigidbody:
   m_GameObject: {fileID: 8068318805487210125}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 3.5
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &8068318805487210125
 GameObject:
@@ -2806,6 +2806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7256351886047646775}
+  - component: {fileID: 8068318805487210128}
   - component: {fileID: 8068318805487210126}
   - component: {fileID: 8068318805487210124}
   - component: {fileID: 8068318805487210127}
@@ -2850,6 +2851,23 @@ CapsuleCollider:
   m_Height: 1.881055
   m_Direction: 1
   m_Center: {x: 0, y: 0.9318597, z: 0}
+--- !u!114 &8068318805487210128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8068318805487210125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3bfb4d221a901419c3399dfb9f95b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementForce: 1
+  jumpForce: 5
+  lowProfile: 2.5
+  highProfile: 5
+  maxProfile: 0
 --- !u!4 &8164691728213358640
 Transform:
   m_ObjectHideFlags: 0

@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 namespace Menus
 {
+    /*
+     * MainMenu
+     * Script for MainMenu functionality and UI.
+     */
     public class MainMenu : MonoBehaviour
     {
         public GameObject newCaseFilePanel, accessCaseFilePanel, accessPrompt;
