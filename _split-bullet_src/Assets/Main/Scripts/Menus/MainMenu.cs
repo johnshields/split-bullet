@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -8,8 +7,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        newCaseFilePanel.SetActive(false);
-        accessCaseFilePanel.SetActive(false);
+        CaseFilePanelSetsActive();
         accessPrompt.SetActive(false);
     }
 
@@ -45,7 +43,7 @@ public class MainMenu : MonoBehaviour
         else
         {
             accessPrompt.SetActive(true);
-            Invoke(nameof(AccessPrompt), 2.5f);
+            Invoke(nameof(AccessPrompt), 2f);
         }
     }
 
