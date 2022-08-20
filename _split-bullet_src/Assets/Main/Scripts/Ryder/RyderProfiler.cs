@@ -15,7 +15,7 @@ namespace Player
         private InputAction _moveKeys;
 
         // movement
-        public float movementForce = 1, jumpForce = 5, lowProfile = 2.5f, highProfile = 5, maxProfile;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
@@ -54,8 +54,8 @@ namespace Player
             // cap Ryder's speed
             var hVelocity = _rb.velocity;
             hVelocity.y = 0;
-            if (hVelocity.sqrMagnitude > maxProfile * maxProfile)
-                _rb.velocity = hVelocity.normalized * maxProfile + Vector3.up * _rb.velocity.y;
+            if (hVelocity.sqrMagnitude > maxSpeed * maxSpeed)
+                _rb.velocity = hVelocity.normalized * maxSpeed + Vector3.up * _rb.velocity.y;
 
             LookAt();
             MovementProfile();
@@ -87,7 +87,7 @@ namespace Player
                 _rb.angularVelocity = Vector3.zero;
         }
 
-        // Ryder can only jump when Grounded().
+        // Ryder can only JumpAction when Grounded().
         private void JumpAction(InputAction.CallbackContext obj)
         {
             if (!_grounded) return;
@@ -105,8 +105,8 @@ namespace Player
             _rb.AddForce(_forceDir, ForceMode.Impulse);
             _forceDir = Vector3.zero;
         
-            // if Run (Shift) is trigger go to highProfile
-            maxProfile = _controls.Profiler.Run.IsPressed() ? highProfile : lowProfile;
+            // if Run (Shift) is trigger go to run
+            maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
         }
     }
 }
