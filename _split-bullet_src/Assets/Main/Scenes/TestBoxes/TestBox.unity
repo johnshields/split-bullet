@@ -14,8 +14,8 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 0
+  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.1
   m_LinearFogStart: 0
@@ -909,7 +909,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1482,7 +1482,7 @@ SkinnedMeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: c0be4de5f6cad5f45a61006adcff66d0, type: 2}
   - {fileID: 2100000, guid: 7d2cdd25312198c4a8b08f6f65cd76ec, type: 2}
-  - {fileID: 2100000, guid: 7174e6f76d993ad45a1bb41522b5a17e, type: 2}
+  - {fileID: 2100000, guid: afffc0a0fe1ef104491123856e35e132, type: 2}
   - {fileID: 2100000, guid: be7a951c272046a43938c18bce32b03d, type: 2}
   - {fileID: 2100000, guid: 86880b62d1029aa4eaa0c4c5f177cdd0, type: 2}
   - {fileID: 2100000, guid: 2ec3963073041c6478f1a3a9469ce1bc, type: 2}
@@ -2350,11 +2350,11 @@ GameObject:
   - component: {fileID: 4682158388671175184}
   m_Layer: 0
   m_Name: scott_and_walton
-  m_TagString: Untagged
+  m_TagString: Pistol
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6636253899551779841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2810,8 +2810,8 @@ GameObject:
   - component: {fileID: 8068318805487210124}
   - component: {fileID: 8068318805487210127}
   m_Layer: 0
-  m_Name: Ryder@Idle_
-  m_TagString: Untagged
+  m_Name: Ryder
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
