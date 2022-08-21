@@ -13,10 +13,10 @@ namespace Player
     {
         private InputControls _controls;
         private Rigidbody _rb;
-        private Animator _animator;
-        private int _speed, _jump, _attack, _dodge;
-        private bool _actionDone;
-        public float cooldown = 4;
+        private Animator _anim;
+        private int _idle, _speed, _jump, _attack, _dodge;
+        private bool _dodgeDone, _attackDone;
+        public float dodgeCool = .7f, attackCool = 4;
 
         private void Awake()
         {
@@ -26,14 +26,15 @@ namespace Player
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
-            _animator = GetComponent<Animator>();
+            _anim = GetComponent<Animator>();
 
+            _idle = Animator.StringToHash("Idle");
             _speed = Animator.StringToHash("Speed");
             _jump = Animator.StringToHash("Jump");
             _attack = Animator.StringToHash("Attack");
             _dodge = Animator.StringToHash("Dodge");
 
-            _animator.SetFloat(_speed, 0);
+            _anim.SetFloat(_speed, 0);
         }
 
         private void OnEnable()
@@ -51,37 +52,85 @@ namespace Player
             _controls.Profiler.Dodge.started -= DodgeAction;
             _controls.Profiler.Disable();
         }
-        
+
         private void Update()
         {
-            if (_actionDone)
-                cooldown -= Time.deltaTime;
-
-            if (_actionDone && cooldown <= 0)
-                _actionDone = false;
+            CoolDown();
+            SwitchAttackLayers();
         }
 
         private void LateUpdate()
         {
-            _animator.SetFloat(_speed, _rb.velocity.magnitude * GetComponent<RyderProfiler>().maxSpeed);
+            _anim.SetFloat(_speed, _rb.velocity.magnitude * GetComponent<RyderProfiler>().maxSpeed);
         }
 
         private void JumpAction(InputAction.CallbackContext obj)
         {
-            _animator.SetTrigger(_jump);
+            if(GetComponent<RyderProfiler>().grounded)
+                _anim.SetTrigger(_jump);
         }
 
         private void AttackAction(InputAction.CallbackContext obj)
         {
-            _animator.SetTrigger(_attack);
+            if (_dodgeDone && _attackDone) return;
+            IdleReset(true);
+            _anim.SetTrigger(_attack);
+            _dodgeDone = true;
+            attackCool = 4;
         }
 
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (_actionDone) return;
-            _actionDone = true;
-            _animator.SetTrigger(_dodge);
-            cooldown = .7f;
+            if (_dodgeDone && _attackDone) return;
+            IdleReset(true);
+            _anim.SetTrigger(_dodge);
+            _dodgeDone = true;
+            dodgeCool = .7f;
+        }
+
+        private void CoolDown()
+        {
+            // dodge
+            if (_dodgeDone)
+                dodgeCool -= Time.deltaTime;
+
+            if (_dodgeDone && dodgeCool <= 0)
+                _dodgeDone = false;
+
+            // attack
+            if (_attackDone)
+                attackCool -= Time.deltaTime;
+
+            if (_attackDone && attackCool <= 0)
+                _attackDone = false;
+        }
+
+        private void SwitchAttackLayers()
+        {
+            // switch Layers depending on Movement
+            if (!_controls.Profiler.Movement.IsPressed())
+            {
+                // StandardAttack
+                _anim.SetLayerWeight(3, 1);
+                _anim.SetLayerWeight(4, 0);
+            }
+            else
+            {
+                // AppliedAttack
+                _anim.SetLayerWeight(3, 0);
+                _anim.SetLayerWeight(4, 1);
+            }
+        }
+
+        private void IdleReset(bool reset)
+        {
+            _anim.SetBool(_idle, reset);
+            if (reset) Invoke(nameof(IdleFalse), 0.1f);
+        }
+
+        private void IdleFalse()
+        {
+            _anim.SetBool(_idle, false);
         }
     }
 }

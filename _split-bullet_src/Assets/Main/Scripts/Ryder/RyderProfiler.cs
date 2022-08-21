@@ -15,11 +15,12 @@ namespace Player
         private InputAction _moveKeys;
 
         // movement
-        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 1, cooldown = 4, delay;
+        public bool grounded;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 1, dodgeCool = 4.7f;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
-        private bool _grounded, _runPressed, _runAction, _callJump;
+        private bool _runPressed, _runAction, _callJump;
         private bool _actionNotCooled;
         private bool _dodgeDone;
 
@@ -46,14 +47,20 @@ namespace Player
             _controls.Profiler.Dodge.started -= DodgeAction;
             _controls.Profiler.Disable();
         }
-        
-        
+
+
         private void Update()
         {
             CallDodge();
         }
 
         private void FixedUpdate()
+        {
+            MovementProfile();
+            LookAt();
+        }
+
+        private void MovementProfile()
         {
             // movement X & Y
             _forceDir += GetCameraRight(_mainCam) * (_moveKeys.ReadValue<Vector2>().x * movementForce);
@@ -65,10 +72,14 @@ namespace Player
             if (hVelocity.sqrMagnitude > maxSpeed * maxSpeed)
                 _rb.velocity = hVelocity.normalized * maxSpeed + Vector3.up * _rb.velocity.y;
 
-            LookAt();
-            MovementProfile();
+            _rb.AddForce(_forceDir, ForceMode.Impulse);
+            _forceDir = Vector3.zero;
+
+            // if Run (Shift) is trigger go to run
+            maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
         }
 
+        // Forward & Back.
         private Vector3 GetCameraForward(Component cam)
         {
             var forward = cam.transform.forward;
@@ -76,6 +87,7 @@ namespace Player
             return forward.normalized;
         }
 
+        // Side to side.
         private Vector3 GetCameraRight(Component cam)
         {
             var right = cam.transform.right;
@@ -95,31 +107,22 @@ namespace Player
                 _rb.angularVelocity = Vector3.zero;
         }
 
-
-        private void MovementProfile()
-        {
-            _rb.AddForce(_forceDir, ForceMode.Impulse);
-            _forceDir = Vector3.zero;
-
-            // if Run (Shift) is trigger go to run
-            maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
-        }
-
         // Called by animation Event.
         public void CallJump()
         {
             // Ryder can only JumpAction when Grounded().
-            if (!_callJump && !_grounded) return;
+            if (!_callJump && !grounded) return;
             _rb.velocity = transform.TransformDirection(0, jumpForce, 0f);
-            _grounded = false;
+            grounded = false;
             _callJump = false;
         }
 
         private void OnCollisionEnter()
         {
-            _grounded = true;
+            grounded = true;
         }
-        
+
+        // TODO - fix dodge _rb and anim conflict w/ Movement.
         private void DodgeAction(InputAction.CallbackContext obj)
         {
             if (_dodgeDone) return;
@@ -130,16 +133,16 @@ namespace Player
         {
             if (_dodgeDone)
             {
-                cooldown -= Time.deltaTime;
-                dodge += 0.3f;  // dodges force increases
-                _rb.AddForce(transform.forward * -dodge, ForceMode.Impulse);   
+                dodgeCool -= Time.deltaTime;
+                dodge += 0.3f; // dodges force increases
+                _rb.AddForce(transform.forward * -dodge, ForceMode.Impulse);
             }
 
-            if (_dodgeDone && cooldown <= 0)
+            if (_dodgeDone && dodgeCool <= 0)
             {
                 dodge = 0;
                 _dodgeDone = false;
-                cooldown = .7f;
+                dodgeCool = .7f;
             }
         }
     }
