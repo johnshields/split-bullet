@@ -33,7 +33,8 @@ namespace Menus
 
         private void OnGUI()
         {
-            passwordPrompt.text = msg;
+            passwordPrompt.text = newCaseFilePanel.activeInHierarchy ? msg : string.Empty;
+
             if (_passwordInputActive)
                 ValidatePassword();
         }
