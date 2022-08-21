@@ -5,7 +5,7 @@ namespace Player
 {
     /*
      * RyderProfiler
-     * Main Script for Ryder functionality and controls.
+     * Main Script for Ryder's functionality and controls.
      * ref - https://youtu.be/WIl6ysorTE0
      */
     public class RyderProfiler : MonoBehaviour
@@ -62,7 +62,7 @@ namespace Player
 
         private void MovementProfile()
         {
-            // movement X & Y
+            // Movement X & Y
             _forceDir += GetCameraRight(_mainCam) * (_moveKeys.ReadValue<Vector2>().x * movementForce);
             _forceDir += GetCameraForward(_mainCam) * (_moveKeys.ReadValue<Vector2>().y * movementForce);
 
@@ -72,10 +72,11 @@ namespace Player
             if (hVelocity.sqrMagnitude > maxSpeed * maxSpeed)
                 _rb.velocity = hVelocity.normalized * maxSpeed + Vector3.up * _rb.velocity.y;
 
+            // Movement force
             _rb.AddForce(_forceDir, ForceMode.Impulse);
             _forceDir = Vector3.zero;
 
-            // if Run (Shift) is trigger go to run
+            // if Run (Shift) IsPressed go to run
             maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
         }
 

@@ -6,7 +6,7 @@ namespace Player
 {
     /*
      * RyderAnimations
-     * Script that controls the Ryder animations.
+     * Script that controls Ryder's animations.
      * ref - https://youtu.be/WIl6ysorTE0
      */
     public class RyderAnimations : MonoBehaviour
