@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -66,7 +65,7 @@ namespace Player
 
         private void JumpAction(InputAction.CallbackContext obj)
         {
-            if(GetComponent<RyderProfiler>().grounded)
+            if (GetComponent<RyderProfiler>().grounded)
                 _anim.SetTrigger(_jump);
         }
 

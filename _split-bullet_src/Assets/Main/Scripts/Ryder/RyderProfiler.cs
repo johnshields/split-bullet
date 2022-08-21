@@ -111,7 +111,7 @@ namespace Player
         // Called by animation Event.
         public void CallJump()
         {
-            // Ryder can only JumpAction when Grounded().
+            // Ryder can only JumpAction when grounded
             if (!_callJump && !grounded) return;
             _rb.velocity = transform.TransformDirection(0, jumpForce, 0f);
             grounded = false;
