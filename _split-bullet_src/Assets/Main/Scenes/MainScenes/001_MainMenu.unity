@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a0fd92f59bbeb8149b8518efd5f8b064, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -3548,7 +3548,6 @@ MonoBehaviour:
   accessCaseFilePanel: {fileID: 333691593}
   accessPrompt: {fileID: 431338550}
   restartBtn: {fileID: 284074986}
-  passwordInput: {fileID: 251463047}
   passwordPrompt: {fileID: 1061843585}
   passwordField: {fileID: 1908380622}
   hasAccess: 0

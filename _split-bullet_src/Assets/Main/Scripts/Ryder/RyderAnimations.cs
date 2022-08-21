@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +14,9 @@ namespace Player
         private InputControls _controls;
         private Rigidbody _rb;
         private Animator _animator;
-        private int _speed, _jump, _attack;
+        private int _speed, _jump, _attack, _dodge;
+        private bool _actionDone;
+        public float cooldown = 4;
 
         private void Awake()
         {
@@ -31,6 +31,7 @@ namespace Player
             _speed = Animator.StringToHash("Speed");
             _jump = Animator.StringToHash("Jump");
             _attack = Animator.StringToHash("Attack");
+            _dodge = Animator.StringToHash("Dodge");
 
             _animator.SetFloat(_speed, 0);
         }
@@ -39,6 +40,7 @@ namespace Player
         {
             _controls.Profiler.Jump.started += JumpAction;
             _controls.Profiler.Attack.started += AttackAction;
+            _controls.Profiler.Dodge.started += DodgeAction;
             _controls.Profiler.Enable();
         }
 
@@ -46,7 +48,17 @@ namespace Player
         {
             _controls.Profiler.Jump.started -= JumpAction;
             _controls.Profiler.Attack.started -= AttackAction;
+            _controls.Profiler.Dodge.started -= DodgeAction;
             _controls.Profiler.Disable();
+        }
+        
+        private void Update()
+        {
+            if (_actionDone)
+                cooldown -= Time.deltaTime;
+
+            if (_actionDone && cooldown <= 0)
+                _actionDone = false;
         }
 
         private void LateUpdate()
@@ -56,14 +68,20 @@ namespace Player
 
         private void JumpAction(InputAction.CallbackContext obj)
         {
-            print("Jump");
             _animator.SetTrigger(_jump);
         }
 
         private void AttackAction(InputAction.CallbackContext obj)
         {
-            print("Attack");
             _animator.SetTrigger(_attack);
+        }
+
+        private void DodgeAction(InputAction.CallbackContext obj)
+        {
+            if (_actionDone) return;
+            _actionDone = true;
+            _animator.SetTrigger(_dodge);
+            cooldown = .7f;
         }
     }
 }

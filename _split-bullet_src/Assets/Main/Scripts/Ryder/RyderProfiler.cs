@@ -15,11 +15,13 @@ namespace Player
         private InputAction _moveKeys;
 
         // movement
-        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 1, cooldown = 4, delay;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
-        private bool _grounded, _runPressed, _runAction;
+        private bool _grounded, _runPressed, _runAction, _callJump;
+        private bool _actionNotCooled;
+        private bool _dodgeDone;
 
         private void Awake()
         {
@@ -35,14 +37,20 @@ namespace Player
         private void OnEnable()
         {
             _moveKeys = _controls.Profiler.Movement;
-            _controls.Profiler.Jump.started += JumpAction;
+            _controls.Profiler.Dodge.started += DodgeAction;
             _controls.Profiler.Enable();
         }
 
         private void OnDisable()
         {
-            _controls.Profiler.Jump.started -= JumpAction;
+            _controls.Profiler.Dodge.started -= DodgeAction;
             _controls.Profiler.Disable();
+        }
+        
+        
+        private void Update()
+        {
+            CallDodge();
         }
 
         private void FixedUpdate()
@@ -87,12 +95,24 @@ namespace Player
                 _rb.angularVelocity = Vector3.zero;
         }
 
-        // Ryder can only JumpAction when Grounded().
-        private void JumpAction(InputAction.CallbackContext obj)
+
+        private void MovementProfile()
         {
-            if (!_grounded) return;
+            _rb.AddForce(_forceDir, ForceMode.Impulse);
+            _forceDir = Vector3.zero;
+
+            // if Run (Shift) is trigger go to run
+            maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
+        }
+
+        // Called by animation Event.
+        public void CallJump()
+        {
+            // Ryder can only JumpAction when Grounded().
+            if (!_callJump && !_grounded) return;
             _rb.velocity = transform.TransformDirection(0, jumpForce, 0f);
             _grounded = false;
+            _callJump = false;
         }
 
         private void OnCollisionEnter()
@@ -100,13 +120,27 @@ namespace Player
             _grounded = true;
         }
         
-        private void MovementProfile()
+        private void DodgeAction(InputAction.CallbackContext obj)
         {
-            _rb.AddForce(_forceDir, ForceMode.Impulse);
-            _forceDir = Vector3.zero;
-        
-            // if Run (Shift) is trigger go to run
-            maxSpeed = _controls.Profiler.Run.IsPressed() ? run : walk;
+            if (_dodgeDone) return;
+            _dodgeDone = true;
+        }
+
+        private void CallDodge()
+        {
+            if (_dodgeDone)
+            {
+                cooldown -= Time.deltaTime;
+                dodge += 0.3f;  // dodges force increases
+                _rb.AddForce(transform.forward * -dodge, ForceMode.Impulse);   
+            }
+
+            if (_dodgeDone && cooldown <= 0)
+            {
+                dodge = 0;
+                _dodgeDone = false;
+                cooldown = .7f;
+            }
         }
     }
 }

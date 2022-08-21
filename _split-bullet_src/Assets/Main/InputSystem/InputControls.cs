@@ -80,6 +80,15 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""904d81cd-7eec-474c-b5ac-3d37f62febae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -247,6 +256,28 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""action"": ""MoveLeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d947b18-9bcc-41d2-9783-b4032c85daec"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d6bb401-c47c-412f-9def-29f0768d437a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -278,6 +309,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         m_Profiler_Look = m_Profiler.FindAction("Look", throwIfNotFound: true);
         m_Profiler_Jump = m_Profiler.FindAction("Jump", throwIfNotFound: true);
         m_Profiler_Attack = m_Profiler.FindAction("Attack", throwIfNotFound: true);
+        m_Profiler_Dodge = m_Profiler.FindAction("Dodge", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -343,6 +375,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Profiler_Look;
     private readonly InputAction m_Profiler_Jump;
     private readonly InputAction m_Profiler_Attack;
+    private readonly InputAction m_Profiler_Dodge;
     public struct ProfilerActions
     {
         private @InputControls m_Wrapper;
@@ -353,6 +386,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Profiler_Look;
         public InputAction @Jump => m_Wrapper.m_Profiler_Jump;
         public InputAction @Attack => m_Wrapper.m_Profiler_Attack;
+        public InputAction @Dodge => m_Wrapper.m_Profiler_Dodge;
         public InputActionMap Get() { return m_Wrapper.m_Profiler; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -380,6 +414,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                 @Attack.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnAttack;
+                @Dodge.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
+                @Dodge.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
+                @Dodge.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
             }
             m_Wrapper.m_ProfilerActionsCallbackInterface = instance;
             if (instance != null)
@@ -402,6 +439,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Dodge.started += instance.OnDodge;
+                @Dodge.performed += instance.OnDodge;
+                @Dodge.canceled += instance.OnDodge;
             }
         }
     }
@@ -423,5 +463,6 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnDodge(InputAction.CallbackContext context);
     }
 }
