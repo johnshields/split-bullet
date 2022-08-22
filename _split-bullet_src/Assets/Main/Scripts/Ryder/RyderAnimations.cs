@@ -13,9 +13,10 @@ namespace Player
         private InputControls _controls;
         private Rigidbody _rb;
         private Animator _anim;
-        private int _idle, _speed, _jump, _attack, _dodge;
-        private bool _dodgeDone, _attackDone;
-        public float dodgeCool = .7f, attackCool = 4;
+        private int _speed, _jump, _runJump, _attack, _dodge, _dodgeFwd;
+        private bool _dodgeDone, _attackDone, _jumpDone;
+        private float _attackInit, _jumpInit;
+        public float attackCool = 2, jumpCool = 3;
 
         private void Awake()
         {
@@ -26,14 +27,16 @@ namespace Player
         {
             _rb = GetComponent<Rigidbody>();
             _anim = GetComponent<Animator>();
-
-            _idle = Animator.StringToHash("Idle");
+            
             _speed = Animator.StringToHash("Speed");
             _jump = Animator.StringToHash("Jump");
+            _runJump = Animator.StringToHash("RunJump");
             _attack = Animator.StringToHash("Attack");
             _dodge = Animator.StringToHash("Dodge");
+            _dodgeFwd = Animator.StringToHash("DodgeFwd");
 
-            _anim.SetFloat(_speed, 0);
+            _attackInit = attackCool;
+            _jumpInit = jumpCool;
         }
 
         private void OnEnable()
@@ -58,50 +61,60 @@ namespace Player
             SwitchAttackLayers();
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
             _anim.SetFloat(_speed, _rb.velocity.magnitude * GetComponent<RyderProfiler>().maxSpeed);
         }
 
         private void JumpAction(InputAction.CallbackContext obj)
         {
-            if (GetComponent<RyderProfiler>().grounded)
+            if (!GetComponent<RyderProfiler>().grounded || _jumpDone) return;
+            if (!_controls.Profiler.Movement.IsPressed() && !_controls.Profiler.Run.IsPressed())
                 _anim.SetTrigger(_jump);
+            else
+                _anim.SetTrigger(_runJump);
+            _jumpDone = true;
         }
 
         private void AttackAction(InputAction.CallbackContext obj)
         {
-            if (_dodgeDone && _attackDone) return;
-            IdleReset(true);
+            if (_attackDone) return;
             _anim.SetTrigger(_attack);
-            _dodgeDone = true;
-            attackCool = 4;
-        }
-
-        private void DodgeAction(InputAction.CallbackContext obj)
-        {
-            if (_dodgeDone && _attackDone) return;
-            IdleReset(true);
-            _anim.SetTrigger(_dodge);
-            _dodgeDone = true;
-            dodgeCool = .7f;
+            _attackDone = true;
         }
 
         private void CoolDown()
         {
-            // dodge
-            if (_dodgeDone)
-                dodgeCool -= Time.deltaTime;
+            // jump
+            if (_jumpDone)
+                jumpCool -= Time.deltaTime;
+            else
+                jumpCool = _jumpInit;
 
-            if (_dodgeDone && dodgeCool <= 0)
-                _dodgeDone = false;
+            if (_jumpDone && jumpCool <= 0)
+                _jumpDone = false;
 
             // attack
             if (_attackDone)
                 attackCool -= Time.deltaTime;
+            else
+                attackCool = _attackInit;
 
             if (_attackDone && attackCool <= 0)
                 _attackDone = false;
+        }
+
+        private void DodgeAction(InputAction.CallbackContext obj)
+        {
+            if (_dodgeDone) return;
+            _anim.SetTrigger(!_controls.Profiler.Movement.IsPressed() ? _dodge : _dodgeFwd);
+            _dodgeDone = true;
+            Invoke(nameof(RestDodge), 1.5f);
+        }
+
+        private void RestDodge()
+        {
+            _dodgeDone = false;
         }
 
         private void SwitchAttackLayers()
@@ -119,17 +132,6 @@ namespace Player
                 _anim.SetLayerWeight(3, 0);
                 _anim.SetLayerWeight(4, 1);
             }
-        }
-
-        private void IdleReset(bool reset)
-        {
-            _anim.SetBool(_idle, reset);
-            if (reset) Invoke(nameof(IdleFalse), 0.1f);
-        }
-
-        private void IdleFalse()
-        {
-            _anim.SetBool(_idle, false);
         }
     }
 }

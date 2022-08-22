@@ -207,7 +207,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""id"": ""cc6501fd-528d-4137-8f88-67db88a91ca9"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeVector2"",
                     ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,

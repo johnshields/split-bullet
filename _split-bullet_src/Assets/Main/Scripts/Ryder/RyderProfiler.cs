@@ -16,13 +16,12 @@ namespace Player
 
         // movement
         public bool grounded;
-        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 1, dodgeCool = 4.7f;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
-        private bool _runPressed, _runAction, _callJump;
-        private bool _actionNotCooled;
-        private bool _dodgeDone;
+        private bool _runPressed, _runAction, _callJump, _actionNotCooled, _dodgeDone;
+        private float _dodgeInit;
 
         private void Awake()
         {
@@ -33,6 +32,7 @@ namespace Player
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
+            _dodgeInit = dodge;
         }
 
         private void OnEnable()
@@ -48,16 +48,13 @@ namespace Player
             _controls.Profiler.Disable();
         }
 
-
-        private void Update()
-        {
-            CallDodge();
-        }
-
         private void FixedUpdate()
         {
             MovementProfile();
             LookAt();
+
+            if (!_controls.Profiler.Movement.IsPressed())
+                CallDodge();
         }
 
         private void MovementProfile()
@@ -123,28 +120,23 @@ namespace Player
             grounded = true;
         }
 
-        // TODO - fix dodge _rb and anim conflict w/ Movement.
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (_dodgeDone) return;
-            _dodgeDone = true;
+            if (!_dodgeDone && !_controls.Profiler.Movement.IsPressed()) _dodgeDone = true;
         }
 
         private void CallDodge()
         {
-            if (_dodgeDone)
-            {
-                dodgeCool -= Time.deltaTime;
-                dodge += 0.3f; // dodges force increases
-                _rb.AddForce(transform.forward * -dodge, ForceMode.Impulse);
-            }
+            if (!_dodgeDone) return;
+            dodge -= Time.deltaTime; // increase dodge
+            _rb.velocity = transform.TransformDirection(0, 0, -dodge);
+            Invoke(nameof(RestDodge), 1.5f);
+        }
 
-            if (_dodgeDone && dodgeCool <= 0)
-            {
-                dodge = 0;
-                _dodgeDone = false;
-                dodgeCool = .7f;
-            }
+        private void RestDodge()
+        {
+            dodge = _dodgeInit;
+            _dodgeDone = false;
         }
     }
 }
