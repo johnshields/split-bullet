@@ -1,4 +1,4 @@
-<p align="center"><img src="workings/shots/good_shots/MainTitleRain.jpg" alt="tsb"/></p>
+<p align="center"><img src="workings/photos/shots/good_shots/split-bullet.gif" alt="tsb"/></p>
 
 ***
 
@@ -11,10 +11,9 @@
 ***
 
 # About
-Joe Ryder, a private eye in the city of New Annwin, 
-finds a split bullet that leads him to an otherworld.
-The city has transformed into two split realities.
-The first, Ryder's dream, where it is full of colour.
+Joe Ryder, a private eye in the city of New Annwin, finds a split bullet that leads him to an otherworld.
+The city has been into two split realities. 
+The first, Ryder's dream, where it is full of colour. 
 The second, Ryder's nightmare, where his surroundings are in black, white and gold.
 
 ***

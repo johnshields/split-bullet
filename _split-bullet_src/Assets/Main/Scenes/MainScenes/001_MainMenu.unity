@@ -3997,7 +3997,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: THIS WILL DESTROY YOUR CASE FILE
+  m_text: this will reset you saved game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 90af9ec8e914daa489f966ab1c8663e7, type: 2}
   m_sharedMaterial: {fileID: -2392160604481289433, guid: 90af9ec8e914daa489f966ab1c8663e7, type: 2}
