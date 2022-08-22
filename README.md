@@ -12,7 +12,7 @@
 
 # About
 Joe Ryder, a private eye in the city of New Annwin, finds a split bullet that leads him to an otherworld.
-The city has been into two split realities. 
+The city has been split into two realities. 
 The first, Ryder's dream, where it is full of colour. 
 The second, Ryder's nightmare, where his surroundings are in black, white and gold.
 
