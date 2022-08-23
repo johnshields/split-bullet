@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,12 +17,15 @@ namespace Player
 
         // movement
         public bool grounded;
-        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3, rotationSpeed = 4;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
         private bool _runPressed, _runAction, _callJump, _actionNotCooled, _dodgeDone;
         private float _dodgeInit;
+
+        // profiles
+        public bool lowProfile, highProfile;
 
         private void Awake()
         {
@@ -39,12 +43,16 @@ namespace Player
         {
             _moveKeys = _controls.Profiler.Movement;
             _controls.Profiler.Dodge.started += DodgeAction;
+            _controls.Profiler.LowProfile.started += LowProfile;
+            _controls.Profiler.HighProfile.started += HighProfile;
             _controls.Profiler.Enable();
         }
 
         private void OnDisable()
         {
             _controls.Profiler.Dodge.started -= DodgeAction;
+            _controls.Profiler.LowProfile.started -= LowProfile;
+            _controls.Profiler.HighProfile.started -= HighProfile;
             _controls.Profiler.Disable();
         }
 
@@ -137,6 +145,30 @@ namespace Player
         {
             dodge = _dodgeInit;
             _dodgeDone = false;
+        }
+
+        // Input: 1
+        private void LowProfile(InputAction.CallbackContext obj)
+        {
+            if (!lowProfile)
+            {
+                lowProfile = true;
+                highProfile = false;
+                GetComponent<ScottAndWalton>().EquipPistol(false);
+                print($"LowProfile Status: LowProfile: {lowProfile} | HighProfile: {highProfile}");
+            }
+        }
+
+        // Input: 2
+        private void HighProfile(InputAction.CallbackContext obj)
+        {
+            if (!highProfile)
+            {
+                lowProfile = false;
+                highProfile = true;
+                GetComponent<ScottAndWalton>().EquipPistol(true);
+                print($"HighProfile Status: LowProfile: {lowProfile} | HighProfile: {highProfile}");
+            }
         }
     }
 }

@@ -59,6 +59,7 @@ namespace Player
         {
             CoolDown();
             SwitchAttackLayers();
+            SwitchProfiles();
         }
 
         private void FixedUpdate()
@@ -131,6 +132,20 @@ namespace Player
                 // AppliedAttack
                 _anim.SetLayerWeight(3, 0);
                 _anim.SetLayerWeight(4, 1);
+            }
+        }
+
+        private void SwitchProfiles()
+        {
+            if (_controls.Profiler.LowProfile.IsPressed() && GetComponent<RyderProfiler>().lowProfile)
+            {
+                _anim.SetLayerWeight(0, 1);
+                _anim.SetLayerWeight(1, 0);
+            }
+            else if (_controls.Profiler.HighProfile.IsPressed() && GetComponent<RyderProfiler>().highProfile)
+            {
+                _anim.SetLayerWeight(0, 0);
+                _anim.SetLayerWeight(1, 1);
             }
         }
     }

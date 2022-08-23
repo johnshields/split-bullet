@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pistol
+  - CultureZone
+  - TransportBuilding
+  - ResidentialZone
+  - SteppedHouse
+  - Crosshair
+  - Dummy
+  - Barrel
+  - RandoAudio
   layers:
   - Default
   - TransparentFX

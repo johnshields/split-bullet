@@ -89,6 +89,33 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LowProfile"",
+                    ""type"": ""Button"",
+                    ""id"": ""19cd6377-8830-4d49-a88e-a34d2bfee9bf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HighProfile"",
+                    ""type"": ""Button"",
+                    ""id"": ""40dfe04b-11a6-4d1f-a760-b1c23c347b38"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirePistol"",
+                    ""type"": ""Button"",
+                    ""id"": ""41a7b749-c8d5-4e2a-9144-99d417f53f70"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,7 +210,7 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f1d7a841-5b08-43f5-8047-1faec1b2f000"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -278,6 +305,94 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""action"": ""Dodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""207ac77f-2f9d-42bb-9cb1-c1df2661c4ec"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HighProfile"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5074b020-f7af-4b01-8560-19c8a6ec93c6"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LowProfile"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""ArrowKeys"",
+                    ""id"": ""37833fe8-e40d-4620-b32a-549d55f07a27"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""190960ab-bd61-464c-84c7-b2e63be52d73"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""d66258c9-dd90-47b8-9b86-53b92ea9b675"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3cfadce8-6a3e-4ed5-bd54-d490d01c9faa"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""22a97324-b0a5-42ad-b3ab-a0aff0f36361"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e39bfa88-64c0-429c-9ace-dcd9d58faedb"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirePistol"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -310,6 +425,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         m_Profiler_Jump = m_Profiler.FindAction("Jump", throwIfNotFound: true);
         m_Profiler_Attack = m_Profiler.FindAction("Attack", throwIfNotFound: true);
         m_Profiler_Dodge = m_Profiler.FindAction("Dodge", throwIfNotFound: true);
+        m_Profiler_LowProfile = m_Profiler.FindAction("LowProfile", throwIfNotFound: true);
+        m_Profiler_HighProfile = m_Profiler.FindAction("HighProfile", throwIfNotFound: true);
+        m_Profiler_FirePistol = m_Profiler.FindAction("FirePistol", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -376,6 +494,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Profiler_Jump;
     private readonly InputAction m_Profiler_Attack;
     private readonly InputAction m_Profiler_Dodge;
+    private readonly InputAction m_Profiler_LowProfile;
+    private readonly InputAction m_Profiler_HighProfile;
+    private readonly InputAction m_Profiler_FirePistol;
     public struct ProfilerActions
     {
         private @InputControls m_Wrapper;
@@ -387,6 +508,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Profiler_Jump;
         public InputAction @Attack => m_Wrapper.m_Profiler_Attack;
         public InputAction @Dodge => m_Wrapper.m_Profiler_Dodge;
+        public InputAction @LowProfile => m_Wrapper.m_Profiler_LowProfile;
+        public InputAction @HighProfile => m_Wrapper.m_Profiler_HighProfile;
+        public InputAction @FirePistol => m_Wrapper.m_Profiler_FirePistol;
         public InputActionMap Get() { return m_Wrapper.m_Profiler; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -417,6 +541,15 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                 @Dodge.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
                 @Dodge.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
                 @Dodge.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnDodge;
+                @LowProfile.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLowProfile;
+                @LowProfile.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLowProfile;
+                @LowProfile.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnLowProfile;
+                @HighProfile.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnHighProfile;
+                @HighProfile.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnHighProfile;
+                @HighProfile.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnHighProfile;
+                @FirePistol.started -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnFirePistol;
+                @FirePistol.performed -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnFirePistol;
+                @FirePistol.canceled -= m_Wrapper.m_ProfilerActionsCallbackInterface.OnFirePistol;
             }
             m_Wrapper.m_ProfilerActionsCallbackInterface = instance;
             if (instance != null)
@@ -442,6 +575,15 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                 @Dodge.started += instance.OnDodge;
                 @Dodge.performed += instance.OnDodge;
                 @Dodge.canceled += instance.OnDodge;
+                @LowProfile.started += instance.OnLowProfile;
+                @LowProfile.performed += instance.OnLowProfile;
+                @LowProfile.canceled += instance.OnLowProfile;
+                @HighProfile.started += instance.OnHighProfile;
+                @HighProfile.performed += instance.OnHighProfile;
+                @HighProfile.canceled += instance.OnHighProfile;
+                @FirePistol.started += instance.OnFirePistol;
+                @FirePistol.performed += instance.OnFirePistol;
+                @FirePistol.canceled += instance.OnFirePistol;
             }
         }
     }
@@ -464,5 +606,8 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
+        void OnLowProfile(InputAction.CallbackContext context);
+        void OnHighProfile(InputAction.CallbackContext context);
+        void OnFirePistol(InputAction.CallbackContext context);
     }
 }
