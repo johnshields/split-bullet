@@ -1,3 +1,4 @@
+using Managers;
 using Player;
 using UnityEngine;
 
@@ -5,6 +6,15 @@ namespace Collectables
 {
     public class BulletsBox : MonoBehaviour
     {
+        private AudioSource _audio;
+        private GameObject _randoAudio;
+
+        private void Start()
+        {
+            _audio = GetComponent<AudioSource>();
+            _randoAudio = GameObject.FindGameObjectWithTag("RandoAudio");
+        }
+        
         private void OnTriggerEnter(Collider obj)
         {
             if (obj.CompareTag("Player") &&
@@ -12,7 +22,7 @@ namespace Collectables
             {
                 obj.GetComponent<ScottAndWalton>().fillUpBullets = true;
                 obj.GetComponent<ScottAndWalton>().FillUpBullets(6);
-                obj.GetComponent<RyderSFX>().BulletsPickup(.6f); // TODO - change to different SFX Script.
+                BulletsPickup(.6f);
             }
         }
 
@@ -20,6 +30,12 @@ namespace Collectables
         {
             if (obj.CompareTag("Player"))
                 obj.GetComponent<ScottAndWalton>().fillUpBullets = false;
+        }
+        
+        private void BulletsPickup(float vol)
+        {
+            _audio.Stop();
+            _audio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("ScottAndWalton/BulletsPickup"), vol);
         }
     }
 }
