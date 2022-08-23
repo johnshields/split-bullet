@@ -1,5 +1,6 @@
 using System;
 using Characters;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,11 @@ namespace Player
         private Camera _mainCam, _barrel;
         private bool _fired, _reloadingChamber;
         private int _chamber = 7;
+        private RaycastHit _hit;
+        public int bullets, maxBullets = 36;
+        public bool fillUpBullets;
+        public Transform bullet, bulletTrans;
+        public ParticleSystem[] flashVFX;
 
         private void Awake()
         {
@@ -20,6 +26,8 @@ namespace Player
 
         private void Start()
         {
+            bullets = maxBullets;
+            _chamber = bullets / 6 + 1;
             _pistol = GameObject.FindGameObjectWithTag("Pistol");
             _crosshair = GameObject.FindGameObjectWithTag("Crosshair");
             _barrel = GameObject.FindGameObjectWithTag("Barrel").GetComponent<Camera>();
@@ -31,6 +39,9 @@ namespace Player
         private void Update()
         {
             ReloadingChamber();
+
+            if (bullets > maxBullets)
+                bullets = maxBullets;
         }
 
         private void OnEnable()
@@ -44,68 +55,94 @@ namespace Player
             _controls.Profiler.Jump.started -= FirePistol;
             _controls.Profiler.Disable();
         }
-
+        
         public void EquipPistol(bool equip)
         {
             _pistol.SetActive(equip);
             _crosshair.SetActive(equip);
         }
 
+        // ref - https://youtu.be/dqfVlSxOXv8
         private void FirePistol(InputAction.CallbackContext obj)
         {
-            if (GetComponent<RyderProfiler>().highProfile && !_fired && _chamber != 0)
+            if (GetComponent<RyderProfiler>().actionActive) return;
+            if (GetComponent<RyderProfiler>().highProfile && !_fired && _chamber != 0 && bullets != 0)
             {
                 Chamber();
-                GetComponent<RyderSFX>().PistolFire(.6f);
+                if (_chamber > 0)
+                {
+                    GetComponent<RyderSFX>().PistolFire(.6f);
+                    MuzzleFlash();
+                }
 
-                var forward = _mainCam.transform.forward;
-                forward.y = 0;
-                forward.Normalize();
-                Aim(forward);
-
+                // gets the center point of the screen
                 var center = new Vector2(Screen.width / 2, Screen.height / 2);
                 var ray = _barrel.ScreenPointToRay(center);
 
+                // testing
                 Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 2);
 
+                // if ray (bullet) hits a transform
                 if (Physics.Raycast(ray, out var hit))
                 {
+                    _hit = hit;
                     print($"Pistol hit: {hit.transform.name}");
                     // testing
-                    if (hit.transform.CompareTag("Dummy"))
-                    {
+                    if (hit.transform.CompareTag("Dummy") && _chamber > 0)
                         _dummy.GetComponentInParent<DummyProfiler>().DummyHit(hit.transform.gameObject);
-                        _dummy.GetComponentInParent<DummyProfiler>().DummyDead(hit.transform.gameObject);
-                    }
                 }
+
+                var aimDir = (_hit.point - bulletTrans.position).normalized;
+                ShootBullet(aimDir);
 
                 Invoke(nameof(Fired), .5f);
             }
             else
                 print($"Ryder in HighProfile: {GetComponent<RyderProfiler>().highProfile}");
-        }
 
-        private void Aim(Vector3 target)
-        {
-            transform.LookAt(transform.position + target);
+            if (GetComponent<RyderProfiler>().highProfile && bullets == 0)
+                GetComponent<RyderSFX>().PistolDryFire(.6f);
         }
 
         private void Chamber()
         {
             _fired = true;
             _chamber -= 1;
-            print($"Bullets in chamber: {_chamber}");
+        }
+
+        private void MuzzleFlash()
+        {
+            flashVFX[0].Play();
+            flashVFX[1].Play();
+            flashVFX[2].Play();
+        }
+
+        private void ShootBullet(Vector3 aim)
+        {
+            Instantiate(bullet, bulletTrans.position, Quaternion.LookRotation(aim, Vector3.up));
+            var forward = _mainCam.transform.forward;
+            forward.y = 0;
+            forward.Normalize();
+            Aim(forward);
+        }
+
+
+        private void Aim(Vector3 target)
+        {
+            transform.LookAt(transform.position + target);
         }
 
         private void Fired()
         {
             _fired = false;
         }
-        
+
         private void ReloadingChamber()
         {
-            if (_chamber <= 0 && !_reloadingChamber)
+            if (_chamber <= 0 && bullets != 0 && !_reloadingChamber)
             {
+                bullets -= 6;
+                if (bullets == 0) return;
                 _reloadingChamber = true;
                 GetComponent<Animator>().SetTrigger($"Reload");
                 GetComponent<RyderSFX>().PistolChamberReload(.6f);
@@ -117,6 +154,13 @@ namespace Player
         {
             _chamber += 7;
             _reloadingChamber = false;
+        }
+
+        public void FillUpBullets(int amount)
+        {
+            if (!fillUpBullets) return;
+            fillUpBullets = false;
+            bullets += amount;
         }
     }
 }

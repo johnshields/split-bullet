@@ -12,6 +12,8 @@ public class RyderSFX : MonoBehaviour
         _randoAudio = GameObject.FindGameObjectWithTag("RandoAudio");
         PistolFire(0);
         PistolChamberReload(0);
+        PistolDryFire(0);
+        BulletsPickup(0);
     }
     
     public void PistolFire(float vol)
@@ -24,5 +26,17 @@ public class RyderSFX : MonoBehaviour
     {
         _audio.Stop();
         _audio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("ScottAndWalton/Reload"), vol);
+    }
+    
+    public void PistolDryFire(float vol)
+    {
+        _audio.Stop();
+        _audio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("ScottAndWalton/DryFire"), vol);
+    }
+    
+    public void BulletsPickup(float vol)
+    {
+        _audio.Stop();
+        _audio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("ScottAndWalton/BulletsPickup"), vol);
     }
 }

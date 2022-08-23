@@ -13,6 +13,7 @@ TagManager:
   - Dummy
   - Barrel
   - RandoAudio
+  - ScottAndWaltonBullet
   layers:
   - Default
   - TransparentFX

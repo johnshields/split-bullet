@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,12 +17,12 @@ namespace Player
         private InputAction _moveKeys;
 
         // movement
-        public bool grounded;
+        public bool grounded, dodgeDone, actionActive;
         public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3, rotationSpeed = 4;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
-        private bool _runPressed, _runAction, _callJump, _actionNotCooled, _dodgeDone;
+        private bool _runPressed, _runAction, _callJump, _actionNotCooled;
         private float _dodgeInit;
 
         // profiles
@@ -54,6 +55,14 @@ namespace Player
             _controls.Profiler.LowProfile.started -= LowProfile;
             _controls.Profiler.HighProfile.started -= HighProfile;
             _controls.Profiler.Disable();
+        }
+
+        private void Update()
+        {
+            if (!grounded || dodgeDone)
+                actionActive = true;
+            else
+                actionActive = false;
         }
 
         private void FixedUpdate()
@@ -130,21 +139,21 @@ namespace Player
 
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (!_dodgeDone && !_controls.Profiler.Movement.IsPressed()) _dodgeDone = true;
+            if (!dodgeDone && !_controls.Profiler.Movement.IsPressed()) dodgeDone = true;
         }
 
         private void CallDodge()
         {
-            if (!_dodgeDone) return;
+            if (!dodgeDone) return;
             dodge -= Time.deltaTime; // increase dodge
             _rb.velocity = transform.TransformDirection(0, 0, -dodge);
-            Invoke(nameof(RestDodge), 1.5f);
+            Invoke(nameof(RestDodge), .8f);
         }
 
         private void RestDodge()
         {
             dodge = _dodgeInit;
-            _dodgeDone = false;
+            dodgeDone = false;
         }
 
         // Input: 1
@@ -155,6 +164,7 @@ namespace Player
                 lowProfile = true;
                 highProfile = false;
                 GetComponent<ScottAndWalton>().EquipPistol(false);
+                _mainCam.GetComponent<CinemachineFreeLook>().m_YAxisRecentering.m_enabled = true;
                 print($"LowProfile Status: LowProfile: {lowProfile} | HighProfile: {highProfile}");
             }
         }
@@ -167,6 +177,7 @@ namespace Player
                 lowProfile = false;
                 highProfile = true;
                 GetComponent<ScottAndWalton>().EquipPistol(true);
+                _mainCam.GetComponent<CinemachineFreeLook>().m_YAxisRecentering.m_enabled = false;
                 print($"HighProfile Status: LowProfile: {lowProfile} | HighProfile: {highProfile}");
             }
         }

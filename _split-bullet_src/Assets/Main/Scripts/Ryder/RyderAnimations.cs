@@ -13,7 +13,7 @@ namespace Player
         private InputControls _controls;
         private Rigidbody _rb;
         private Animator _anim;
-        private int _speed, _jump, _runJump, _attack, _dodge, _dodgeFwd;
+        private int _speed, _jump, _runJump, _attack, _pistolWhip, _dodge, _dodgeFwd;
         private bool _dodgeDone, _attackDone, _jumpDone;
         private float _attackInit, _jumpInit;
         public float attackCool = 2, jumpCool = 3;
@@ -27,11 +27,12 @@ namespace Player
         {
             _rb = GetComponent<Rigidbody>();
             _anim = GetComponent<Animator>();
-            
+
             _speed = Animator.StringToHash("Speed");
             _jump = Animator.StringToHash("Jump");
             _runJump = Animator.StringToHash("RunJump");
             _attack = Animator.StringToHash("Attack");
+            _pistolWhip = Animator.StringToHash("PistolWhip");
             _dodge = Animator.StringToHash("Dodge");
             _dodgeFwd = Animator.StringToHash("DodgeFwd");
 
@@ -80,7 +81,8 @@ namespace Player
         private void AttackAction(InputAction.CallbackContext obj)
         {
             if (_attackDone) return;
-            _anim.SetTrigger(_attack);
+            // if not in HighProfile _attack (punch) - else _pistolWhip
+            _anim.SetTrigger(!GetComponent<RyderProfiler>().highProfile ? _attack : _pistolWhip);
             _attackDone = true;
         }
 
@@ -108,14 +110,17 @@ namespace Player
         private void DodgeAction(InputAction.CallbackContext obj)
         {
             if (_dodgeDone) return;
+            // if not Movement.IsPressed() _dodge (back) - else _dodgeFwd
             _anim.SetTrigger(!_controls.Profiler.Movement.IsPressed() ? _dodge : _dodgeFwd);
             _dodgeDone = true;
+            GetComponent<RyderProfiler>().dodgeDone = true;
             Invoke(nameof(RestDodge), 1.5f);
         }
 
         private void RestDodge()
         {
             _dodgeDone = false;
+            GetComponent<RyderProfiler>().dodgeDone = false;
         }
 
         private void SwitchAttackLayers()
