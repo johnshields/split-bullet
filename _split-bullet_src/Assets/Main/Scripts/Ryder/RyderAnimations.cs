@@ -110,12 +110,14 @@ namespace Player
             if (_dodgeDone) return;
             _anim.SetTrigger(!_controls.Profiler.Movement.IsPressed() ? _dodge : _dodgeFwd);
             _dodgeDone = true;
+            GetComponent<RyderProfiler>().dodgeDone = true;
             Invoke(nameof(RestDodge), 1.5f);
         }
 
         private void RestDodge()
         {
             _dodgeDone = false;
+            GetComponent<RyderProfiler>().dodgeDone = false;
         }
 
         private void SwitchAttackLayers()

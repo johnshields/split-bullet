@@ -393,6 +393,17 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""action"": ""FirePistol"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f934ab54-97aa-4928-9445-0cfb2cae9c45"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirePistol"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },

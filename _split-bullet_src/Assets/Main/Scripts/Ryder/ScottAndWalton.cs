@@ -53,6 +53,7 @@ namespace Player
 
         private void FirePistol(InputAction.CallbackContext obj)
         {
+            if (GetComponent<RyderProfiler>().actionActive) return;
             if (GetComponent<RyderProfiler>().highProfile && !_fired && _chamber != 0)
             {
                 Chamber();
@@ -101,7 +102,7 @@ namespace Player
         {
             _fired = false;
         }
-        
+
         private void ReloadingChamber()
         {
             if (_chamber <= 0 && !_reloadingChamber)
