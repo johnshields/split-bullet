@@ -395,6 +395,34 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Testing"",
+            ""id"": ""6ee69d26-7841-44db-9308-be90da9d70b8"",
+            ""actions"": [
+                {
+                    ""name"": ""NoirVFX"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b41821b-c552-4176-b7df-c7d2b3474d64"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0f4b02ae-38d1-49e3-ac29-11331ccf9ba0"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NoirVFX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -428,6 +456,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         m_Profiler_LowProfile = m_Profiler.FindAction("LowProfile", throwIfNotFound: true);
         m_Profiler_HighProfile = m_Profiler.FindAction("HighProfile", throwIfNotFound: true);
         m_Profiler_FirePistol = m_Profiler.FindAction("FirePistol", throwIfNotFound: true);
+        // Testing
+        m_Testing = asset.FindActionMap("Testing", throwIfNotFound: true);
+        m_Testing_NoirVFX = m_Testing.FindAction("NoirVFX", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -588,6 +619,39 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         }
     }
     public ProfilerActions @Profiler => new ProfilerActions(this);
+
+    // Testing
+    private readonly InputActionMap m_Testing;
+    private ITestingActions m_TestingActionsCallbackInterface;
+    private readonly InputAction m_Testing_NoirVFX;
+    public struct TestingActions
+    {
+        private @InputControls m_Wrapper;
+        public TestingActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @NoirVFX => m_Wrapper.m_Testing_NoirVFX;
+        public InputActionMap Get() { return m_Wrapper.m_Testing; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TestingActions set) { return set.Get(); }
+        public void SetCallbacks(ITestingActions instance)
+        {
+            if (m_Wrapper.m_TestingActionsCallbackInterface != null)
+            {
+                @NoirVFX.started -= m_Wrapper.m_TestingActionsCallbackInterface.OnNoirVFX;
+                @NoirVFX.performed -= m_Wrapper.m_TestingActionsCallbackInterface.OnNoirVFX;
+                @NoirVFX.canceled -= m_Wrapper.m_TestingActionsCallbackInterface.OnNoirVFX;
+            }
+            m_Wrapper.m_TestingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @NoirVFX.started += instance.OnNoirVFX;
+                @NoirVFX.performed += instance.OnNoirVFX;
+                @NoirVFX.canceled += instance.OnNoirVFX;
+            }
+        }
+    }
+    public TestingActions @Testing => new TestingActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -609,5 +673,9 @@ public partial class @InputControls : IInputActionCollection2, IDisposable
         void OnLowProfile(InputAction.CallbackContext context);
         void OnHighProfile(InputAction.CallbackContext context);
         void OnFirePistol(InputAction.CallbackContext context);
+    }
+    public interface ITestingActions
+    {
+        void OnNoirVFX(InputAction.CallbackContext context);
     }
 }
