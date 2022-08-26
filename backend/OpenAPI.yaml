@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Split Cloud Save
+  description: Split Cloud
+  version: 1.0.0
+  contact:
+    email: cathalbutler@outlook.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: /api/v1
+paths:
+  /login:
+    summary: Path used to login a User
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        required: true
+      tags:
+        - Account
+      responses:
+        '204':
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+              description: Returns a new session_id to be used for all future requests
+          description: Login successful
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                LoginFailed:
+                  value:
+                    code: 403
+                    messages: Invalid Name and/or password
+          description: Login Unsuccessful
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                InternalServerError:
+                  value:
+                    code: 500
+                    messages: Unable to process request
+          description: Unable to process request
+      security:
+        - { }
+      operationId: login
+      summary: Log in
+      description: Attempts to log a user in
+  /register:
+      summary: Path used to register a new User
+      post:
+        requestBody:
+#          $ref: '#/components/requestBodies/inline_object'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+          required: true
+        tags:
+          - Account
+        responses:
+          '204':
+            description: Successfully registered a new User
+          '400':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+                examples:
+                  InvalidNameOrPassword:
+                    value:
+                      code: 400
+                      messages: Password insufficiently complex
+                  NameTooShort:
+                    value:
+                      code: 400
+                      messages: Name too short
+            description: Problem with username or password
+          '409':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+                examples:
+                  NameTaken:
+                    value:
+                      code: 409
+                      messages: NameTaken
+            description: Name is taken
+          '500':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+                examples:
+                  InternalServerError:
+                    value:
+                      code: 500
+                      messages: Unable to process request
+            description: Unable to process request
+        security:
+          - { }
+        operationId: register
+        summary: Registers User
+        description: Attempts to register a new user
+components:
+    schemas:
+        User:
+            required:
+                - id
+                - name
+            type: object
+            properties:
+                id:
+                    type: integer
+                name:
+                    type: string
+            example:
+                id: 0
+                name: Bob
+        Error:
+            required:
+                - code
+                - messages
+            type: object
+            properties:
+                code:
+                    type: integer
+                messages:
+                    type: string
+        inline_object:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+    responses:
+        InternalServerIssue:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    examples:
+                        ChannelNotFound:
+                            value:
+                                code: 500
+                                messages: Unable to process request
+            description: Unable to create user
+    requestBodies:
+        inline_object:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/inline_object'
+            required: true
+    securitySchemes:
+        LoginRequired:
+            type: apiKey
+            name: session_id
+            in: cookie
