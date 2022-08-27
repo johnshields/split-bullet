@@ -1,0 +1,214 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: cathalbutler@outlook.com
+  description: Split Cloud
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Split Cloud Save
+  version: 1.0.0
+servers:
+- url: /api/v1
+paths:
+  /login:
+    post:
+      description: Attempts to log a user in
+      operationId: login
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_1'
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+        required: true
+      responses:
+        "204":
+          description: Login successful
+          headers:
+            Set-Cookie:
+              description: Returns a new session_id to be used for all future requests
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "403":
+          content:
+            application/json:
+              examples:
+                LoginFailed:
+                  value:
+                    code: 403
+                    messages: Invalid Name and/or password
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Login Unsuccessful
+        "500":
+          content:
+            application/json:
+              examples:
+                InternalServerError:
+                  value:
+                    code: 500
+                    messages: Unable to process request
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unable to process request
+      security:
+      - {}
+      summary: Log in
+      tags:
+      - Account
+      x-openapi-router-controller: openapi_server.controllers.account_controller
+    summary: Path used to login a User
+  /register:
+    post:
+      description: Attempts to register a new user
+      operationId: register
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_2'
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+        required: true
+      responses:
+        "204":
+          description: Successfully registered a new User
+        "400":
+          content:
+            application/json:
+              examples:
+                InvalidNameOrPassword:
+                  value:
+                    code: 400
+                    messages: Password insufficiently complex
+                NameTooShort:
+                  value:
+                    code: 400
+                    messages: Name too short
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Problem with username or password
+        "409":
+          content:
+            application/json:
+              examples:
+                NameTaken:
+                  value:
+                    code: 409
+                    messages: NameTaken
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Name is taken
+        "500":
+          content:
+            application/json:
+              examples:
+                InternalServerError:
+                  value:
+                    code: 500
+                    messages: Unable to process request
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unable to process request
+      security:
+      - {}
+      summary: Registers User
+      tags:
+      - Account
+      x-openapi-router-controller: openapi_server.controllers.account_controller
+    summary: Path used to register a new User
+components:
+  requestBodies:
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+      required: true
+    inline_object_1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+      required: true
+    inline_object_2:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_2'
+      required: true
+  responses:
+    InternalServerIssue:
+      content:
+        application/json:
+          examples:
+            ChannelNotFound:
+              value:
+                code: 500
+                messages: Unable to process request
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unable to create user
+  schemas:
+    User:
+      example:
+        id: 0
+        name: Bob
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    Error:
+      properties:
+        code:
+          type: integer
+        messages:
+          type: string
+      required:
+      - code
+      - messages
+      type: object
+    inline_object:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+    inline_object_1:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+    inline_object_2:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+  securitySchemes:
+    LoginRequired:
+      in: cookie
+      name: session_id
+      type: apiKey
+      x-apikeyInfoFunc: openapi_server.controllers.security_controller_.info_from_LoginRequired
