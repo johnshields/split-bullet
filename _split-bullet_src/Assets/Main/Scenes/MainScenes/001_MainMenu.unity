@@ -3783,7 +3783,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The Night Shift
+  m_text: Cup Of Joe
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2010e76cec4a25b418a5ea4da9b8ef2a, type: 2}
   m_sharedMaterial: {fileID: -8549850704315820157, guid: 2010e76cec4a25b418a5ea4da9b8ef2a, type: 2}
