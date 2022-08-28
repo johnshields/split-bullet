@@ -16,17 +16,7 @@ paths:
       description: Attempts to log a user in
       operationId: login
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_1'
-        content:
-          application/json:
-            schema:
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-              type: object
-        required: true
+        $ref: '#/components/requestBodies/inline_object'
       responses:
         "204":
           description: Login successful
@@ -71,17 +61,7 @@ paths:
       description: Attempts to register a new user
       operationId: register
       requestBody:
-        $ref: '#/components/requestBodies/inline_object_2'
-        content:
-          application/json:
-            schema:
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-              type: object
-        required: true
+        $ref: '#/components/requestBodies/user'
       responses:
         "204":
           description: Successfully registered a new User
@@ -137,18 +117,11 @@ components:
           schema:
             $ref: '#/components/schemas/inline_object'
       required: true
-    inline_object_1:
+    user:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_object_1'
-      required: true
-    inline_object_2:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/inline_object_2'
-      required: true
+            $ref: '#/components/schemas/User'
   responses:
     InternalServerIssue:
       content:
@@ -166,12 +139,16 @@ components:
       example:
         id: 0
         name: Bob
+        email: bob@outlook.com
       properties:
         id:
           type: integer
         name:
           type: string
+        email:
+          type: string
       required:
+      - email
       - id
       - name
       type: object
@@ -186,20 +163,6 @@ components:
       - messages
       type: object
     inline_object:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      type: object
-    inline_object_1:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      type: object
-    inline_object_2:
       properties:
         username:
           type: string
