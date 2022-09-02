@@ -9,8 +9,13 @@ namespace Player
 
         private void OnGUI()
         {
-            bulletsCounter.text = $"BULLETS: {GetComponent<ScottAndWalton>().bullets}";
+            int chamberNum;
+            if (GetComponent<ScottAndWalton>().chamber <= 0)
+                chamberNum = 0;
+            else
+                chamberNum = GetComponent<ScottAndWalton>().chamber - 1;
+            
+            bulletsCounter.text = $"{chamberNum} / {GetComponent<ScottAndWalton>().bullets}";
         }
-
     }
 }

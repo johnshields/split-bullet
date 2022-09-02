@@ -9,12 +9,11 @@ namespace Player
     public class ScottAndWalton : MonoBehaviour
     {
         private InputControls _controls;
-        private GameObject _pistol, _crosshair, _dummy;
-        private Camera _mainCam, _barrel;
+        private GameObject _pistol, _crosshair, _counter, _dummy;
+        private Camera _mainCam;
         private bool _fired, _reloadingChamber;
-        private int _chamber = 7;
         private RaycastHit _hit;
-        public int bullets, maxBullets = 36;
+        public int chamber = 7, bullets, maxBullets = 36;
         public bool fillUpBullets;
         public Transform bullet, bulletTrans;
         public ParticleSystem[] flashVFX;
@@ -27,10 +26,10 @@ namespace Player
         private void Start()
         {
             bullets = maxBullets;
-            _chamber = bullets / 6 + 1;
+            chamber = bullets / 6 + 1;
             _pistol = GameObject.FindGameObjectWithTag("Pistol");
             _crosshair = GameObject.FindGameObjectWithTag("Crosshair");
-            _barrel = GameObject.FindGameObjectWithTag("Barrel").GetComponent<Camera>();
+            _counter =  GameObject.FindGameObjectWithTag("BulletCounter");
             _dummy = GameObject.FindGameObjectWithTag("Dummy");
             _mainCam = Camera.main;
             EquipPistol(false);
@@ -60,16 +59,17 @@ namespace Player
         {
             _pistol.SetActive(equip);
             _crosshair.SetActive(equip);
+            _counter.SetActive(equip);
         }
 
         // ref - https://youtu.be/dqfVlSxOXv8
         private void FirePistol(InputAction.CallbackContext obj)
         {
             if (GetComponent<RyderProfiler>().actionActive) return;
-            if (GetComponent<RyderProfiler>().highProfile && !_fired && _chamber != 0 && bullets != 0)
+            if (GetComponent<RyderProfiler>().highProfile && !_fired && chamber != 0 && bullets != 0)
             {
                 Chamber();
-                if (_chamber > 0)
+                if (chamber > 0)
                 {
                     GetComponent<RyderSFX>().PistolFire(.6f);
                     MuzzleFlash();
@@ -77,7 +77,7 @@ namespace Player
 
                 // gets the center point of the screen
                 var center = new Vector2(Screen.width / 2, Screen.height / 2);
-                var ray = _barrel.ScreenPointToRay(center);
+                var ray = _mainCam.ScreenPointToRay(center);
 
                 // testing
                 Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 2);
@@ -88,7 +88,7 @@ namespace Player
                     _hit = hit;
                     print($"Pistol hit: {hit.transform.name}");
                     // testing
-                    if (hit.transform.CompareTag("Dummy") && _chamber > 0)
+                    if (hit.transform.CompareTag("Dummy") && chamber > 0)
                         _dummy.GetComponentInParent<DummyProfiler>().DummyHit(hit.transform.gameObject);
                 }
 
@@ -107,7 +107,7 @@ namespace Player
         private void Chamber()
         {
             _fired = true;
-            _chamber -= 1;
+            chamber -= 1;
         }
 
         private void MuzzleFlash()
@@ -139,7 +139,7 @@ namespace Player
 
         private void ReloadingChamber()
         {
-            if (_chamber <= 0 && bullets != 0 && !_reloadingChamber)
+            if (chamber <= 0 && bullets != 0 && !_reloadingChamber)
             {
                 bullets -= 6;
                 if (bullets == 0) return;
@@ -152,7 +152,7 @@ namespace Player
 
         private void ChamberReloaded()
         {
-            _chamber += 7;
+            chamber += 7;
             _reloadingChamber = false;
         }
 

@@ -55,8 +55,9 @@ public class RyderSFX : MonoBehaviour
 
     private void Steps(float vol)
     {
-        if (_controls.Profiler.Movement.IsPressed() ||
-            _controls.Profiler.Jump.IsPressed() && GetComponent<RyderProfiler>().grounded)
+        if (_controls.Profiler.Movement.IsPressed() &&
+            !_controls.Profiler.Jump.IsPressed() && GetComponent<RyderProfiler>().grounded &&
+            !_controls.Profiler.Dodge.IsPressed() && !GetComponent<RyderProfiler>().dodgeActive)
         {
             _stepsAudio.Stop();
             _stepsAudio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("Ryder/Steps"), vol);

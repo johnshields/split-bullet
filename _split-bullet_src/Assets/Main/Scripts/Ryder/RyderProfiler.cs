@@ -17,8 +17,8 @@ namespace Player
         private InputAction _moveKeys;
 
         // movement
-        public bool grounded, dodgeDone, actionActive;
-        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3, rotationSpeed = 4;
+        public bool grounded, callDodge, dodgeActive, actionActive;
+        public float movementForce = 1, jumpForce = 5, walk = 1.5f, run = 3, maxSpeed, dodge = 3;
         private Vector3 _forceDir = Vector3.zero;
         private Rigidbody _rb;
         private Camera _mainCam;
@@ -59,7 +59,7 @@ namespace Player
 
         private void Update()
         {
-            if (!grounded || dodgeDone)
+            if (!grounded || callDodge)
                 actionActive = true;
             else
                 actionActive = false;
@@ -139,12 +139,13 @@ namespace Player
 
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (!dodgeDone && !_controls.Profiler.Movement.IsPressed()) dodgeDone = true;
+            if (!callDodge && !_controls.Profiler.Movement.IsPressed()) callDodge = true;
         }
 
         private void CallDodge()
         {
-            if (!dodgeDone) return;
+            if (!callDodge) return;
+            dodgeActive = true;
             dodge -= Time.deltaTime; // increase dodge
             _rb.velocity = transform.TransformDirection(0, 0, -dodge);
             Invoke(nameof(RestDodge), .8f);
@@ -153,7 +154,8 @@ namespace Player
         private void RestDodge()
         {
             dodge = _dodgeInit;
-            dodgeDone = false;
+            callDodge = false;
+            dodgeActive = false;
         }
 
         // Input: 1
@@ -165,7 +167,6 @@ namespace Player
                 highProfile = false;
                 GetComponent<ScottAndWalton>().EquipPistol(false);
                 _mainCam.GetComponent<CinemachineFreeLook>().m_YAxisRecentering.m_enabled = true;
-                print($"LowProfile Status: LowProfile: {lowProfile} | HighProfile: {highProfile}");
             }
         }
 

@@ -11,10 +11,10 @@ TagManager:
   - SteppedHouse
   - Crosshair
   - Dummy
-  - Barrel
   - RandoAudio
   - ScottAndWaltonBullet
   - Footsteps
+  - BulletCounter
   layers:
   - Default
   - TransparentFX

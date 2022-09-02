@@ -29935,13 +29935,13 @@ AnimationClip:
     functionName: Steps
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.1
+    floatParameter: 0.05
     intParameter: 0
     messageOptions: 0
   - time: 0.5
     functionName: Steps
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.1
+    floatParameter: 0.05
     intParameter: 0
     messageOptions: 0

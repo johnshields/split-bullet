@@ -113,14 +113,14 @@ namespace Player
             // if not Movement.IsPressed() _dodge (back) - else _dodgeFwd
             _anim.SetTrigger(!_controls.Profiler.Movement.IsPressed() ? _dodge : _dodgeFwd);
             _dodgeDone = true;
-            GetComponent<RyderProfiler>().dodgeDone = true;
+            GetComponent<RyderProfiler>().callDodge = true;
             Invoke(nameof(RestDodge), 1.5f);
         }
 
         private void RestDodge()
         {
             _dodgeDone = false;
-            GetComponent<RyderProfiler>().dodgeDone = false;
+            GetComponent<RyderProfiler>().callDodge = false;
         }
 
         private void SwitchAttackLayers()
