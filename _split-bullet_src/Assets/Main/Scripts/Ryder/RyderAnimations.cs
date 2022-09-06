@@ -109,12 +109,13 @@ namespace Player
 
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (_dodgeDone) return;
-            // if not Movement.IsPressed() _dodge (back) - else _dodgeFwd
-            _anim.SetTrigger(!_controls.Profiler.Movement.IsPressed() ? _dodge : _dodgeFwd);
-            _dodgeDone = true;
-            GetComponent<RyderProfiler>().callDodge = true;
-            Invoke(nameof(RestDodge), 1.5f);
+            if (!_dodgeDone && GetComponent<RyderProfiler>().callDodge)
+            {
+                _anim.SetTrigger(_dodge);
+                _dodgeDone = true;
+                GetComponent<RyderProfiler>().callDodge = true;
+                Invoke(nameof(RestDodge), 1.5f);   
+            }
         }
 
         private void RestDodge()

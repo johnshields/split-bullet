@@ -139,16 +139,19 @@ namespace Player
 
         private void DodgeAction(InputAction.CallbackContext obj)
         {
-            if (!callDodge && !_controls.Profiler.Movement.IsPressed()) callDodge = true;
+            if (!callDodge && !_controls.Profiler.Movement.IsPressed()) 
+                callDodge = true;
         }
 
         private void CallDodge()
         {
-            if (!callDodge) return;
-            dodgeActive = true;
-            dodge -= Time.deltaTime; // increase dodge
-            _rb.velocity = transform.TransformDirection(0, 0, -dodge);
-            Invoke(nameof(RestDodge), .8f);
+            if (callDodge)
+            {
+                dodgeActive = true;
+                dodge -= Time.deltaTime; // increase dodge
+                _rb.velocity = transform.TransformDirection(0, 0, -dodge);
+                Invoke(nameof(RestDodge), .8f);   
+            }
         }
 
         private void RestDodge()

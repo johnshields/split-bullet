@@ -9,7 +9,7 @@ namespace Player
     public class ScottAndWalton : MonoBehaviour
     {
         private InputControls _controls;
-        private GameObject _pistol, _crosshair, _counter, _dummy;
+        private GameObject _pistol, _crosshair, _counter, _counterUI, _dummy;
         private Camera _mainCam;
         private bool _fired, _reloadingChamber;
         private RaycastHit _hit;
@@ -30,6 +30,7 @@ namespace Player
             _pistol = GameObject.FindGameObjectWithTag("Pistol");
             _crosshair = GameObject.FindGameObjectWithTag("Crosshair");
             _counter =  GameObject.FindGameObjectWithTag("BulletCounter");
+            _counterUI =  GameObject.FindGameObjectWithTag("CounterUI");
             _dummy = GameObject.FindGameObjectWithTag("Dummy");
             _mainCam = Camera.main;
             EquipPistol(false);
@@ -59,7 +60,7 @@ namespace Player
         {
             _pistol.SetActive(equip);
             _crosshair.SetActive(equip);
-            _counter.SetActive(equip);
+            _counterUI.SetActive(equip);
         }
 
         // ref - https://youtu.be/dqfVlSxOXv8

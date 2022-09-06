@@ -14,7 +14,7 @@ namespace Collectables
             _audio = GetComponent<AudioSource>();
             _randoAudio = GameObject.FindGameObjectWithTag("RandoAudio");
         }
-        
+
         private void OnTriggerEnter(Collider obj)
         {
             if (obj.CompareTag("Player") &&
@@ -23,19 +23,19 @@ namespace Collectables
                 obj.GetComponent<ScottAndWalton>().fillUpBullets = true;
                 obj.GetComponent<ScottAndWalton>().FillUpBullets(6);
                 BulletsPickup(.6f);
+                GetComponentInChildren<MeshRenderer>().enabled = false;
+                Invoke(nameof(DestroyBox), 1);
             }
         }
 
-        private void OnTriggerExit(Collider obj)
-        {
-            if (obj.CompareTag("Player"))
-                obj.GetComponent<ScottAndWalton>().fillUpBullets = false;
-        }
-        
         private void BulletsPickup(float vol)
         {
-            _audio.Stop();
             _audio.PlayOneShot(_randoAudio.GetComponent<RandoAudio>().GetRandomClip("ScottAndWalton/BulletsPickup"), vol);
+        }
+
+        private void DestroyBox()
+        {
+            Destroy(gameObject);
         }
     }
 }

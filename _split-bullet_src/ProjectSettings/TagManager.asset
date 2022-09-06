@@ -15,6 +15,7 @@ TagManager:
   - ScottAndWaltonBullet
   - Footsteps
   - BulletCounter
+  - CounterUI
   layers:
   - Default
   - TransparentFX
