@@ -6,7 +6,7 @@
 | **Project Title** | The Split Bullet                                                                                   |
 |:------------------|:---------------------------------------------------------------------------------------------------|
 | **Developers**    | [John Shields](https://github.com/johnshields) & [Cathal Butler](https://github.com/CathalButler)  |
-| **Tech**          | `Unity 2021.3.8f1`, `C#`, `Python`, `3ds Max`, `Photoshop`                                                  |
+| **Tech**          | `Unity 2021.3.8f1` `C#` `Python` `3ds Max` `Photoshop`                                                  |
 
 ***
 
